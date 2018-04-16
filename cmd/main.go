@@ -20,8 +20,13 @@ import (
 )
 
 var FEED = 21  // http://datamine.mta.info/list-of-feeds. 21 is the BDFM lines.
-var TRAIN = "D" // She doesn't even go here
-var STATION = "F21N"  // http://web.mta.info/developers/data/nyct/subway/Stations.csv  <-- GTFS Stop ID
+
+var TRAIN = "F"
+
+// http://web.mta.info/developers/data/nyct/subway/Stations.csv  <-- GTFS Stop ID
+
+// TODO: check north and south at once.
+var STATION = "F21N"
 
 
 // Go has no int64 sort, so this lets us specify our own.
@@ -89,6 +94,7 @@ func main() {
 
   sort.Sort(times)
   for _, eventTime := range times {
+    // TODO: print how many minutes.
     fmt.Printf("%s\n", time.Unix(eventTime, 0))
   }
 }
