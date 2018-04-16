@@ -14,7 +14,16 @@ Add $GOPATH/bin to your path (because you need to access protoc-gen-go from
  there)
 
 ## Configure the key, trains and stations.
-Generate a key at http://datamine.mta.info/ and add it to cmd/key.go.
+Generate a key at http://datamine.mta.info/ . Create a file called cmd/keys.go
+that looks like
+
+```
+package main
+
+// Generated a key at http://datamine.mta.info/
+const KEY = "insert key here"
+```
+
 Add the feed, train and station to the top of main.go
 
 
