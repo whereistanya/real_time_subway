@@ -11,6 +11,7 @@ import (
   "io/ioutil"
   "log"
   "net/http"
+  "sort"
   "time"
 
   "github.com/golang/protobuf/proto"
@@ -21,6 +22,14 @@ import (
 var FEED = 21  // http://datamine.mta.info/list-of-feeds. 21 is the BDFM lines.
 var TRAIN = "D" // She doesn't even go here
 var STATION = "F21N"  // http://web.mta.info/developers/data/nyct/subway/Stations.csv  <-- GTFS Stop ID
+
+
+// Go has no int64 sort, so this lets us specify our own.
+type timeStamps []int64
+func (x timeStamps) Len() int { return len(x) }
+func (x timeStamps) Swap(i, j int) { x[i], x[j] = x[j], x[i] }
+func (x timeStamps) Less(i, j int) bool { return x[i] < x[j] }
+
 
 func main() {
 
@@ -59,24 +68,28 @@ func main() {
   }
 
   header := newFeed.GetHeader()
-  fmt.Printf("Version: %s\n", header.GtfsRealtimeVersion)
+  fmt.Printf("Feed version: %s; ", *(header.GtfsRealtimeVersion))
   // ...this can't be the best way to unpack the time, can it?
-  fmt.Printf("Last updated: %v\n", time.Unix(int64(*(header.Timestamp)), 0))
+  fmt.Printf("last updated: %v\n", time.Unix(int64(*(header.Timestamp)), 0))
 
 
+  times := timeStamps{}
   entities := newFeed.GetEntity()
   for _, entity := range entities {
     update := entity.GetTripUpdate()
     if update != nil && update.GetTrip().GetRouteId() == TRAIN {
       for _, stop_time := range update.GetStopTimeUpdate() {
         if *stop_time.StopId == STATION {
-          fmt.Println("Trip update:")
-          fmt.Println("Stop time:", update.GetStopTimeUpdate())
-        } else {
-          fmt.Println(*stop_time.StopId)
+          arrival := stop_time.GetArrival()
+          times = append(times, arrival.GetTime())
         }
       }
     }
+  }
+
+  sort.Sort(times)
+  for _, eventTime := range times {
+    fmt.Printf("%s\n", time.Unix(eventTime, 0))
   }
 }
 
