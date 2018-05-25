@@ -1,14 +1,14 @@
 # Real time subway info
 
 ## install go
-$ sudo apt-get install golang
-$ mkdir /home/tanya/code/go
-$ export GOPATH=/home/tanya/code/go
+$ sudo apt-get install golang  
+$ mkdir $HOME/code/go  
+$ export GOPATH=$HOME/code/go  
 
 $ sudo apt-get install protobuf-compiler
 
-$ go get -u -v github.com/golang/protobuf/proto
-$ go get -u -v github.com/golang/protobuf/protoc-gen-go
+$ go get -u -v github.com/golang/protobuf/proto  
+$ go get -u -v github.com/golang/protobuf/protoc-gen-go  
 
 Add $GOPATH/bin to your path (because you need to access protoc-gen-go from
  there)
