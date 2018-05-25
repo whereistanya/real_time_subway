@@ -34,8 +34,8 @@ http://datamine.mta.info/sites/all/files/pdfs/nyct-subway.proto.txt
 
 I built them with:
 
-$ protoc --go_out=. gtfs-realtime.proto
-$ protoc --go_out=. nyct-subway.proto
+$ protoc --go_out=. gtfs-realtime.proto  
+$ protoc --go_out=. nyct-subway.proto  
 
 This creates gtfs-realtime.pb.go and nyct-subway.pb.go.
 
